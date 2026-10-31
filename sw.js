@@ -1,5 +1,5 @@
 /* Paintball Manager — service worker : jeu disponible hors connexion, mises à jour automatiques */
-const V = 'pm-v147';
+const V = 'pm-v148';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-180.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -20,7 +20,7 @@ self.addEventListener('fetch', e => {
     return;
   }
   // fichiers du site, moteur 3D et polices : la copie locale tout de suite, mise à jour en arrière-plan
-  if (u.origin === location.origin || /cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net|unpkg\.com|fonts\.(googleapis|gstatic)\.com/.test(u.host)) {
+  if (u.origin === location.origin || /cdnjs\.cloudflare\.com|www\.gstatic\.com|cdn\.jsdelivr\.net|unpkg\.com|fonts\.(googleapis|gstatic)\.com/.test(u.host)) {
     e.respondWith(caches.match(r).then(hit => {
       const net = fetch(r).then(res => {
         if (res && (res.ok || res.type === 'opaque')) { const cp = res.clone(); caches.open(V).then(c => c.put(r, cp)); }
